@@ -110,7 +110,7 @@ nx.draw_networkx_labels(my_graph, pos, labels=short_labels, font_size=8, font_co
 
 # Station Names
 station_names = {
-    "Jurong_East": "Jurong Lake", "25": "Chinese Garden", "23": "Clementi", "22": "Dover",
+    "Jurong_East": "Jurong East", "25": "Chinese Garden", "23": "Clementi", "22": "Dover",
     "Buona_Vista": "Buona Vista", "2": "Bukit Batok", "3": "Bukit Gombak", "4": "Choa Chu Kang",
     "5": "Yew Tee", "23_orange": "One-North", "21_orange": "Holland Village", "20_orange": "Farrer Road",
     "Botanic_Gardens": "Botanic\nGardens", "8_blue": "Tan Kah Kee", "Stevens": "Stevens",
@@ -184,6 +184,7 @@ plt.scatter([], [], color="#9b9b9b", edgecolor="black", s=150, label="Interchang
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3, 
            frameon=True, fontsize=12, title=f"Distance Unit: {unit.upper()}", title_fontsize=14)
 
+
 # (Part Print statistics to console)
 print("\n--- TASK 2: NETWORK STATISTICS ---")
 
@@ -204,6 +205,33 @@ print(df_stats.to_string(index=False))
 print("-" * 35)
 print(f"Total stations: {total_stations}")
 print(f"Total interchanges: {total_inchanges}")
+
+# Ví dụ tính toán cho từng line để in ra bảng
+lines_info = {
+    "East-West (Green)": green_edges_data,
+    "North-South (Red)": red_edges_data,
+    "Circle (Orange)": orange_edges_data,
+    "Downtown (Blue)": blue_edges_data,
+    "Thomson-East Coast (Brown)": brown_edges_data
+}
+
+detailed_stats = []
+for name, data in lines_info.items():
+    dist_list = [d[2] for d in data] # Lấy km
+    dist_miles_list = [d[2] * 0.621371 for d in data] # Quy đổi ra miles
+
+    detailed_stats.append({
+        "Line": name,
+        "Total Length": sum(dist_list),
+        "Avg Distance": np.mean(dist_list),
+        "Total Length (Miles)": sum(dist_miles_list),
+        "Avg Distance (Miles)": np.mean(dist_miles_list)
+
+    })
+
+print("\n--- Detailed Line Statistics ---")
+df_detailed = pd.DataFrame(detailed_stats)
+print(df_detailed)
 
 
 plt.subplots_adjust(bottom=0.25) 
